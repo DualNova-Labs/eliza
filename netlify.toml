@@ -1,0 +1,10 @@
+[build]
+  base = "./"
+  publish = "./dist/"
+  command = "npm run build"
+
+[template.environment]
+  NAME = "Name of the receiver"
+  PIC = "URL of the receiver's image"
+  NICKNAME = "Nickname (optional)"
+  HBD_MSG = "Custom birthday message (optional)"
