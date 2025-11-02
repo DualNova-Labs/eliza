@@ -37,12 +37,14 @@ const setLocalData = async () => {
 //Remote initialization
 const setRemoteData = async () => {
   try {
+    console.log("Fetching image from:", picPath);
     let res = await axios.get(picPath, {
       responseType: "arraybuffer",
     });
     const pic = res.data;
     let markup = "";
     if (msgPath) {
+      console.log("Fetching scroll message from:", msgPath);
       const article = msgPath.split("/").pop();
       res = await axios.get(
         `https://api.telegra.ph/getPage/${article}?return_content=true`
@@ -56,7 +58,10 @@ const setRemoteData = async () => {
     await setPic(pic);
     genIndex(markup);
   } catch (e) {
-    throw new Error(e.message);
+    console.error("Error details:", e.message);
+    console.error("PIC value:", picPath);
+    console.error("SCROLL_MSG value:", msgPath);
+    throw new Error(`Failed to fetch remote data: ${e.message}`);
   }
 };
 
