@@ -7,3 +7,6 @@ temp/
 local/
 src/index.html
 src/pic.jpeg
+
+# Allow assets folder for deployment images
+!assets/

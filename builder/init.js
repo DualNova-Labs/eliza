@@ -37,16 +37,27 @@ const setLocalData = async () => {
 //Remote initialization
 const setRemoteData = async () => {
   try {
-    console.log("Fetching image from:", picPath);
-    let res = await axios.get(picPath, {
-      responseType: "arraybuffer",
-    });
-    const pic = res.data;
+    let pic;
+    
+    // Check if PIC is a URL or a local file path
+    if (picPath.startsWith('http://') || picPath.startsWith('https://')) {
+      console.log("Fetching image from URL:", picPath);
+      let res = await axios.get(picPath, {
+        responseType: "arraybuffer",
+      });
+      pic = res.data;
+    } else {
+      // Use local file from repository (e.g., assets/eliza.jpg)
+      console.log("Reading image from repository:", picPath);
+      const localPicPath = path.join(__dirname, "../", picPath);
+      pic = fs.readFileSync(localPicPath);
+    }
+    
     let markup = "";
     if (msgPath) {
       console.log("Fetching scroll message from:", msgPath);
       const article = msgPath.split("/").pop();
-      res = await axios.get(
+      let res = await axios.get(
         `https://api.telegra.ph/getPage/${article}?return_content=true`
       );
       const { content } = res.data.result;
