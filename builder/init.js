@@ -55,16 +55,25 @@ const setRemoteData = async () => {
     
     let markup = "";
     if (msgPath) {
-      console.log("Fetching scroll message from:", msgPath);
-      const article = msgPath.split("/").pop();
-      let res = await axios.get(
-        `https://api.telegra.ph/getPage/${article}?return_content=true`
-      );
-      const { content } = res.data.result;
-      markup = content.reduce(
-        (string, node) => string + generateMarkupRemote(node),
-        ""
-      );
+      // Check if SCROLL_MSG is a URL or a local file path
+      if (msgPath.startsWith('http://') || msgPath.startsWith('https://')) {
+        console.log("Fetching scroll message from URL:", msgPath);
+        const article = msgPath.split("/").pop();
+        let res = await axios.get(
+          `https://api.telegra.ph/getPage/${article}?return_content=true`
+        );
+        const { content } = res.data.result;
+        markup = content.reduce(
+          (string, node) => string + generateMarkupRemote(node),
+          ""
+        );
+      } else {
+        // Use local file from repository (e.g., assets/eliza-scroll.txt)
+        console.log("Reading scroll message from repository:", msgPath);
+        const localMsgPath = path.join(__dirname, "../", msgPath);
+        const text = fs.readFileSync(localMsgPath, { encoding: "utf-8" });
+        markup = generateMarkupLocal(text);
+      }
     }
     await setPic(pic);
     genIndex(markup);

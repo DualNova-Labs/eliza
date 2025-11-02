@@ -8,3 +8,4 @@
   PIC = "assets/eliza.jpg or URL of the receiver's image"
   NICKNAME = "Nickname (optional)"
   HBD_MSG = "Custom birthday message (optional)"
+  SCROLL_MSG = "assets/eliza-scroll.txt or Telegraph URL (optional)"
